@@ -1,6 +1,5 @@
 #include <Arduino_LSM6DS3.h>
 //This file just deals with the accelerometer and related info, I have not gotten to looking at the other functions but I will soon. Let me know if there are any errors
-LSM6DS3Class(IMU);
 void setup() {
   Serial.begin(9600);
   while(!Serial);
