@@ -1,35 +1,50 @@
 #include <Arduino_LSM6DS3.h>
+#include "SparkFunLSM6DS3.h"
+#include "Wire.h"
+#include "SPI.h"
+LSM6DS3 SensorOne( I2C_MODE, 0x6A );
 //This file just deals with the accelerometer and related info, I have not gotten to looking at the other functions but I will soon. Let me know if there are any errors
 void setup() {
   Serial.begin(9600);
-  while(!Serial);
+//   while(!Serial);
 
-  if(!IMU.begin()){
-    Serial.println("Failed to initialize IMU!");
+//   if(!IMU.begin()){
+//     Serial.println("Failed to initialize IMU!");
 
-    while(1);
+//     while(1);
+//   }
+//   Serial.print("Accelerometer sample rate = ");
+//   Serial.print(IMU.accelerationSampleRate());
+//   Serial.println(" Hz");
+//   Serial.println();
+//   Serial.println("Acceleration in G's");
+//   Serial.println("X\tY\tZ");
+  Serial.println("Processor came out of reset.\n");
+  
+  //Call .begin() to configure the IMUs
+  if( SensorOne.begin() != 0 )
+  {
+	  Serial.println("Problem starting the sensor at 0x6A.");
   }
-  Serial.print("Accelerometer sample rate = ");
-  Serial.print(IMU.accelerationSampleRate());
-  Serial.println(" Hz");
-  Serial.println();
-  Serial.println("Acceleration in G's");
-  Serial.println("X\tY\tZ");
+  else
+  {
+	  Serial.println("Sensor at 0x6A started.");
+  }
 
 }
 
 void loop() {
-  float x, y, z;
+//   float x, y, z;
   float ax [10];
   float ay[10];
   float az[10];
   double thedelay = 0.02;
   double thedelayms = thedelay*1000;
   for(int i = 0;i<sizeof(ax);i++){
-    IMU.readAcceleration(x,y,z);
-    ax[i] = x*9.8;
-    ay[i] = y*9.8;
-    az[i] = (z-1)*9.8;//not sure whether we have to add or subtract one from the z value, feel free to change if necessary
+//     IMU.readAcceleration(x,y,z);
+    ax[i] = SensorOne.readFloatAccelX()*9.8;
+    ay[i] = SensorOne.readFloatAccelY()*9.8;
+    az[i] = SensorOne.readFloatAccelZ()*9.8;//not sure whether we have to add or subtract one from the z value, feel free to change if necessary
     delay(thedelayms);//the period of the lsm6ds3 is 9.61 milliseconds so this delay is more than enough time
     //I arbitrarily chose 10 measurements, it takes in total about 1/5 of a second to do(assuming the delays take up >99% of the time), so not too long. You can mess with the number of measurements as you see fit
   }
