@@ -1,7 +1,7 @@
 #include <Arduino_LSM6DS3.h>
-#include "SparkFunLSM6DS3.h"
-#include "Wire.h"
-#include "SPI.h"
+#include <SparkFunLSM6DS3.h>
+#include <Wire.h>
+#include <SPI.h>
 LSM6DS3 SensorOne( I2C_MODE, 0x6A );
 //This file just deals with the accelerometer and related info, I have not gotten to looking at the other functions but I will soon. Let me know if there are any errors
 void setup() {
