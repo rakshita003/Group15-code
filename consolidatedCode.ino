@@ -13,7 +13,7 @@ float currentX = 0;
 float currentY = 0;
 float currentZ = 0;
 float jerkThreshold = 0.2;  //jerk value to count as jerk, adjust for lower sensitivity
-float jerkCount = 5;  //number of jerks in period to count as jerk, needed to rule out normal acceleration
+float jerkCount = 3;  //number of jerks in period to count as jerk, needed to rule out normal acceleration
 //period = ammount of time in between jerk readings. This is the rate determining step of the void loop
 //so every 5th loop we will output binary for jerk and float for temp and humidity
 //loopCount = number of loops and increments each loop, if on the 5th loop it will reset and output
@@ -54,8 +54,6 @@ void setup() {
     jerksZ [i] = 0;
   }
   Serial.begin(9600);
-  int test = sizeof(jerksX) / sizeof(float);
-  Serial.println(test);
   myIMU.begin();//initialize accelerometer
   for (auto& sensor : dht) {//initialize dht's
     sensor.begin();
@@ -92,7 +90,7 @@ void loop() {
   }
   int count = 0;//count the # of jerks in the last 10 readings
   for (int i = 0; i < sizeof(jerksX) / sizeof(float); i++) {
-    if (jerksX [9] > jerkThreshold || jerksX [9] > jerkThreshold || jerksX [9] > jerkThreshold) {
+    if (jerksX [i] > jerkThreshold || jerksX [i] > jerkThreshold || jerksX [i] > jerkThreshold) {
       count ++;
     }
   }
@@ -118,17 +116,17 @@ void loop() {
     }
     if (count > jerkCount) {//output
       char mystr[] = "1";
-      Serial.write(mystr, 1);
+      //Serial.write(mystr, 1);
       Serial.println("Jerk");
     }
     else {
       char mystr[] = "0";
-      Serial.write(mystr, 1);
+      //Serial.write(mystr, 1);
       Serial.println("No Jerk");
     }
-    Serial.println("Temp");
+    Serial.print("Temp ");
     Serial.println(avgTemperature);
-    Serial.println("Humidity");
+    Serial.print("Humidity ");
     Serial.println(avgHumidity);
     avgTemperature = 0.0;
     avgHumidity = 0.0;
@@ -137,5 +135,4 @@ void loop() {
     loopCount++;
   }
   delay(period);//delay between readings
-
 }
