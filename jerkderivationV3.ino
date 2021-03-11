@@ -13,7 +13,7 @@ float currentX = 0;
 float currentY = 0;
 float currentZ = 0;
 float jerkThreshold = 0.2;
-float jerkCount = 5;
+float jerkCount = 3;
 void setup() {
   for (int i = 0; i < sizeof(jerksX) / sizeof(float); i++) { //populate array with zeroes to avoid nullpointer
     jerksX [i] = 0;
@@ -21,8 +21,6 @@ void setup() {
     jerksZ [i] = 0;
   }
   Serial.begin(9600);
-  int test = sizeof(jerksX) / sizeof(float);
-  Serial.println(test);
   myIMU.begin();
 }
 
@@ -45,20 +43,16 @@ void loop() {
       jerksZ [i] = currentZ - lastZ;
     }
   }
-  /*Serial.print("X=");
-    Serial.println(jerksX[9], 4);
-    Serial.print("Y=");
-    Serial.println(jerksY[9], 4);
-    Serial.print("Z=");
-    Serial.println(jerksZ[9], 4);*/
   int count = 0;
   for (int i = 0; i < sizeof(jerksX) / sizeof(float); i++) {
-    if (jerksX [9] > jerkThreshold || jerksX [9] > jerkThreshold || jerksX [9] > jerkThreshold) {
+    if (jerksX [i] > jerkThreshold || jerksX [i] > jerkThreshold || jerksX [i] > jerkThreshold) {
       count ++;
     }
   }
   if (count > jerkCount) {
     Serial.println("Jerk");
+  }else{
+    Serial.println(count);
   }
   delay(100);
 }
