@@ -110,10 +110,22 @@ void loop() {
       temperature[i] = dht[i].readTemperature();
       humidity[i] = dht[i].readHumidity();
     }
-    for (int i = 0; i < 2; i++) {
-      avgTemperature += temperature[i] * dhtWeight;
-      avgHumidity = avgHumidity + humidity[i]*0.5;
+    // if the reading is null the code will continue with rest of the readings
+   for (int i = 0; i < 2; i++) {
+      if(temperature[i]== null){
+        continue;
+      }
+      else {
+       avgTemperature += temperature[i] * dhtWeight;
+      }
+      if(humidity[i] == null){
+        continue;
+      }
+      else{
+      avgHumidity += humidity[i]*0.5;
+      }
     }
+    
     if (count > jerkCount) {//output
       char mystr[] = "1";
       //Serial.write(mystr, 1);
