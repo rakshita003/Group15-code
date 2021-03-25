@@ -13,7 +13,4 @@ void loop()
 {
   startPlayback(sample, sizeof(sample));
   delay(1800);
-  for (int i= 0; i < 100000; i++){
-      Serial.println("peepee");
-  }
 }
