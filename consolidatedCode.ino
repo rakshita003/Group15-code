@@ -124,20 +124,10 @@ void loop() {
       humidity[i] = dht[i].readHumidity();
     }
     for (int i = 0; i < 2; i++) {
-//       avgTemperature += temperature[i] * dhtWeight;
-//       avgHumidity = avgHumidity + humidity[i] * 0.5;
-      if(temperature[i]== null){
-        continue;
-      }
-      else {
-       avgTemperature += temperature[i] * dhtWeight;
-      }
-      if(humidity[i] == null){
-        continue;
-      }
-      else{
-      avgHumidity += humidity[i]*0.5;
-      }
+      
+     avgTemperature += temperature[i] * dhtWeight;
+     avgHumidity += humidity[i] * 0.5;
+    
     }
     if (count > jerkCount) {//output
       mystr[0] = 'j';
