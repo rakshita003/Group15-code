@@ -120,8 +120,13 @@ void loop() {
 
   if (loopCount == 4) {//loop 4 (output loop)
     for (int i = 0; i < 2; i++) {
-      temperature[i] = dht[i].readTemperature();
-      humidity[i] = dht[i].readHumidity();
+        if(dht[i].read() == 0){
+            temperature[i] = dht[i].readTemperature();
+             humidity[i] = dht[i].readHumidity();
+         }
+       else {
+            Serial.println("The sensor is not connected");
+         }
     }
     for (int i = 0; i < 2; i++) {
       
