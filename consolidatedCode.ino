@@ -55,7 +55,8 @@ float humidity[2];        //arrays for temp and humidity values
 float temperature[2];
 float avgTemperature = 0.0;   //average values
 float avgHumidity = 0.0;
-
+int notWork;
+int count = 0;
 
 void setup() {
   pinMode(red_light_pin, OUTPUT);
@@ -116,7 +117,7 @@ void loop() {
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  avgTemperature += myIMU.readTempC() * lsmWeight;
+  //avgTemperature += myIMU.readTempC() * lsmWeight;
 
   if (loopCount == 4) {//loop 4 (output loop)
     for (int i = 0; i < 2; i++) {
@@ -125,15 +126,46 @@ void loop() {
              humidity[i] = dht[i].readHumidity();
          }
        else {
-            Serial.println("The sensor is not connected");
+             notWork = i;
+             count++;
+             Serial.println("The sensor is not connected");
          }
     }
-    for (int i = 0; i < 2; i++) {
-      
-     avgTemperature += temperature[i] * dhtWeight;
-     avgHumidity += humidity[i] * 0.5;
     
+for(int i = 0; i < 2; i++){
+  
+    if( count == 0 ){
+      
+      avgTemperature += myIMU.readTempC() * lsmWeight;
+      avgTemperature += temperature[i] * dhtWeight;
+      avgHumidity += humidity[i] * 0.5; 
+      
     }
+    else if ( count == 1){
+             dhtWeight = 0.25;
+             lsmWeight = 0.1;
+               if ( notWork = 0){
+                   temperature[0] = 0.0;
+                   humidity[0] = 0.0;
+                }
+              else{
+                   temperature[1] = 0.0;
+                   humidity[1] = 0.0;
+                   }
+            avgTemperature += myIMU.readTempC() * lsmWeight;
+            avgTemperature += temperature[i] * dhtWeight;
+            avgHumidity += humidity[i];
+        }
+        else if ( count == 2 ){
+                 temperature[i] = 0.0;
+                 humidity[i] = 0.0;
+                 dhtWeight = 0.0;
+                 lsmWeight = 0.2;
+                 avgTemperature += myIMU.readTempC() * lsmWeight;
+                 avgTemperature += temperature[i] * dhtWeight;
+                 avgHumidity = 0.0;
+            }
+ }
     if (count > jerkCount) {//output
       mystr[0] = 'j';
       jerk = true;
