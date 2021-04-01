@@ -117,7 +117,7 @@ void loop() {
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //avgTemperature += myIMU.readTempC() * lsmWeight;
+  avgTemperature += myIMU.readTempC() * lsmWeight;
 
   if (loopCount == 4) {//loop 4 (output loop)
     for (int i = 0; i < 2; i++) {
@@ -136,14 +136,14 @@ for(int i = 0; i < 2; i++){
   
     if( count == 0 ){
       
-      avgTemperature += myIMU.readTempC() * lsmWeight;
       avgTemperature += temperature[i] * dhtWeight;
       avgHumidity += humidity[i] * 0.5; 
       
     }
     else if ( count == 1){
-             dhtWeight = 0.25;
-             lsmWeight = 0.1;
+             //dhtWeight = 0.25;
+             //lsmWeight = 0.1;
+              dhtWeight = 0.6;
                if ( notWork = 0){
                    temperature[0] = 0.0;
                    humidity[0] = 0.0;
@@ -152,7 +152,7 @@ for(int i = 0; i < 2; i++){
                    temperature[1] = 0.0;
                    humidity[1] = 0.0;
                    }
-            avgTemperature += myIMU.readTempC() * lsmWeight;
+            
             avgTemperature += temperature[i] * dhtWeight;
             avgHumidity += humidity[i];
         }
@@ -160,8 +160,8 @@ for(int i = 0; i < 2; i++){
                  temperature[i] = 0.0;
                  humidity[i] = 0.0;
                  dhtWeight = 0.0;
-                 lsmWeight = 0.2;
-                 avgTemperature += myIMU.readTempC() * lsmWeight;
+                 //lsmWeight = 0.2;
+                 
                  avgTemperature += temperature[i] * dhtWeight;
                  avgHumidity = 0.0;
             }
